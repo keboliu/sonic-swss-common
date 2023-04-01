@@ -1,12 +1,19 @@
-pkgpython_PYTHON = pyext/py2/swsscommon.py pyext/py2/__init__.py
-pkgpyexec_LTLIBRARIES = pyext/py2/_swsscommon.la
+SWIG_SOURCES = ../swsscommon.i
 
-pyext_py2__swsscommon_la_SOURCES = pyext/py2/swsscommon_wrap.cpp
-pyext_py2__swsscommon_la_CPPFLAGS = -std=c++11 -Icommon -I/usr/include/python$(PYTHON_VERSION)
-pyext_py2__swsscommon_la_LDFLAGS = -module
-pyext_py2__swsscommon_la_LIBADD = common/libswsscommon.la -lpython$(PYTHON_VERSION)
+pkgpython_PYTHON = swsscommon.py __init__.py
+pkgpyexec_LTLIBRARIES = _swsscommon.la
 
-pyext/py2/swsscommon_wrap.cpp: $(SWIG_SOURCES)
-	$(SWIG) $(SWIG_FLAG) -Icommon -o $@ $<
+_swsscommon_la_SOURCES = swsscommon_wrap.cpp
+_swsscommon_la_CPPFLAGS = -std=c++11 -I../../common -I/usr/include/python$(PYTHON_VERSION)
+_swsscommon_la_LDFLAGS = -module
+_swsscommon_la_LIBADD = ../../common/libswsscommon.la -lpython$(PYTHON_VERSION)
 
-CLEANFILES += pyext/py2/swsscommon_wrap.cpp pyext/py2/swsscommon.py
+SWIG_FLAG = -Wall -c++ -python -keyword
+if ARCH64
+SWIG_FLAG += -DSWIGWORDSIZE64
+endif
+
+swsscommon_wrap.cpp: $(SWIG_SOURCES)
+	$(SWIG) $(SWIG_FLAG) -I../../common -o $@ $<
+
+CLEANFILES = swsscommon_wrap.cpp

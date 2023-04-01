@@ -1,24 +1,3 @@
-lib_LTLIBRARIES =
-bin_PROGRAMS =
-
-if DEBUG
-DBGFLAGS = -ggdb -DDEBUG
-else
-DBGFLAGS = -g -DNDEBUG
-endif
-
-SWIG_SOURCES = pyext/swsscommon.i
-SWIG_FLAG = -Wall -c++ -python -keyword
-if ARCH64
-SWIG_FLAG += -DSWIGWORDSIZE64
-endif
-
-CLEANFILES =
-
-include common/Makefile.am
-include pyext/Makefile.am
-include sonic-db-cli/Makefile.am
-include tests/Makefile.am
-
+SUBDIRS = common pyext sonic-db-cli tests
 
 ACLOCAL_AMFLAGS = -I m4
